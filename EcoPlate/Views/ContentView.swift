@@ -1,0 +1,85 @@
+//
+//  ContentView.swift
+//  EcoPlate
+//
+//  Created by Juan Daniel Rodriguez Oropeza on 08.11.2024.
+//
+
+import SwiftUI
+
+struct ContentView: View {
+
+    @State var email: String = ""
+    @State var password: String = ""
+
+    var body: some View {
+        VStack {
+            Text("")
+                .padding(.vertical, 80)
+
+            VStack {
+                Text("Sign up")
+                    .font(.custom("Arial", size: 30))
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal)
+
+                Form {
+                    Section("Email") {
+                        TextField("Your email", text: $email)
+                            .textFieldStyle(.roundedBorder)
+                    }
+
+                    Section("Password") {
+                        TextField("Enter your password", text: $password)
+                            .textFieldStyle(.roundedBorder)
+                    }
+
+                    Button("Sign up") {
+                        /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Action@*/
+                        /*@END_MENU_TOKEN@*/
+                    }
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(Color.black)
+                    .foregroundStyle(Color.white)
+                    .clipShape(.capsule)
+                }
+                .scrollContentBackground(.hidden)
+                .background(Color.white)
+            }
+
+            HStack {
+                Divider()
+                    .frame(height: 1)
+                    .background(Color.gray)
+
+                Text("Or Register with")
+                    .foregroundColor(.gray)
+                    .padding(.horizontal, 8)
+
+                Divider()
+                    .frame(height: 1)
+                    .background(Color.gray)
+            }
+
+            .padding()
+
+            HStack {
+                Button(action: {
+                    print("button pressed")
+
+                }) {
+                    Image(systemName: "apple.logo")
+                        .resizable()
+                }
+                .padding()
+            }
+        }
+        .navigationTitle("Sign up")
+    }
+}
+
+#Preview {
+    ContentView()
+}
