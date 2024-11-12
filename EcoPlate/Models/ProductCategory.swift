@@ -7,6 +7,6 @@
 
 import Foundation
 
-public enum Category: Codable, Observable {
+public enum ProductCategory: Codable, Observable {
     case vegetables, fruits
 }

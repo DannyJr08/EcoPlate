@@ -66,14 +66,28 @@ struct ContentView: View {
             .padding()
 
             HStack {
+                
                 Button(action: {
-                    print("button pressed")
-
+                    // Your button action here
                 }) {
-                    Image(systemName: "apple.logo")
-                        .resizable()
+                    ZStack {
+                        // Black border layer
+                        Image(systemName: "applelogo")
+                            .resizable()
+                            .frame(width: 57, height: 57) // Slightly larger for the border effect
+                            .foregroundColor(.black)
+                            .offset(x: 1, y: 0)
+                        
+                        // White logo layer
+                        Image(systemName: "applelogo")
+                            .resizable()
+                            .frame(width: 50, height: 50) // Original size for the logo
+                            .foregroundColor(.white)
+                    }
+                    .padding()
+                    .border(.black, width: 1)
                 }
-                .padding()
+                .buttonStyle(PlainButtonStyle())
             }
         }
         .navigationTitle("Sign up")
