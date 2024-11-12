@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Name: Codable, Identifiable, Observable {
-    public let id: String
+public struct ProductName: Codable, Identifiable, Observable {
+    public let id: Int
     public let name: String
 }

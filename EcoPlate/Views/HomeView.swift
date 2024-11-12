@@ -7,13 +7,20 @@
 
 import SwiftUI
 
-struct Home: View {
+struct HomeView: View {
+    @State private var showSheet = false
+    
     var body: some View {
-        Button(ac)
-    }
+           Button("Present") {
+               showSheet.toggle()
+           }.font(.largeTitle)
+           .sheet(isPresented: $showSheet) {
+               ProductView()
+           }
+        }
 }
 
 
 #Preview {
-    Home()
+    HomeView()
 }
