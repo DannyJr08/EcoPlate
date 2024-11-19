@@ -62,7 +62,7 @@ struct RecipeCardView: View {
                         .font(.headline)
                         .foregroundColor(.white)
                         .padding(8)
-                        .background(Color.black.opacity(0.6))
+                        .background(Color.black.opacity(0.3))
                         .cornerRadius(5)
                     
                     Spacer()
