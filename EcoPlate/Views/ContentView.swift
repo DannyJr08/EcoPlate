@@ -1,10 +1,3 @@
-//
-//  ContentView.swift
-//  EcoPlate
-//
-//  Created by Juan Daniel Rodriguez Oropeza on 08.11.2024.
-//
-
 import SwiftUI
 import UIKit
 
@@ -57,22 +50,23 @@ struct ContentView: View {
                 
                 Spacer()
                 
-                // Floating Camera Button
-                HStack {
+                // Floating Camera Button at bottom center with larger size
+                VStack {
                     Spacer()
                     Button(action: {
                         isCameraPresented.toggle() // Show the camera
                     }) {
                         HStack {
                             Image(systemName: "camera")
-                                .foregroundColor(.black)
-                            Text("Camera")
-                                .foregroundColor(.black)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 70, height: 80) // Larger size
+                            
                         }
-                        .padding(10)
-                        .background(Capsule().stroke(Color.black, lineWidth: 1))
+                        .padding(.leading, 170)
+
                     }
-                    .padding()
+                    .padding(.bottom, 30) // Padding from the bottom edge
                     .sheet(isPresented: $isCameraPresented) {
                         CameraView(capturedImage: $capturedImage, onCapture: {
                             if let image = capturedImage {
