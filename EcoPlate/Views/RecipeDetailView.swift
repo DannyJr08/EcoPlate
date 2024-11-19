@@ -1,10 +1,3 @@
-//
-//  RecipeDetailView.swift
-//  EcoPlate
-//
-//  Created by Muhammadjon on 19/11/24.
-//
-
 import SwiftUI
 
 struct RecipeDetailView: View {
@@ -40,9 +33,6 @@ struct RecipeDetailView: View {
             
             // Recipe Image with stretched fit
             ZStack {
-                Color(hex: "#F9D146")
-                    .frame(height: 200)
-                
                 Image("Banana") // Replace with the actual image name
                     .resizable()
                     .scaledToFill() // Stretch image to fill the space
@@ -87,23 +77,29 @@ struct RecipeDetailView: View {
             
             // Dynamic Content
             ScrollView {
-                VStack(alignment: .leading, spacing: 10) {
-                    if selectedTab == .ingredients {
-                        Text("• 1 small ripe banana (preferably organic)")
-                        Text("• 25g finely ground oatmeal")
-                        Text("• 5ml runny honey")
-                    } else {
-                        Text("1. Mash the banana in a bowl.")
-                        Text("2. Mix in the oatmeal and honey.")
-                        Text("3. Apply to your face and leave for 10-15 minutes.")
-                        Text("4. Rinse off with warm water.")
+                ZStack {
+                    Color(hex: "F9D146")
+                        .edgesIgnoringSafeArea(.bottom) // Makes the blue background fill the screen vertically
+                    
+                    VStack(alignment: .leading, spacing: 10) {
+                        // Conditionally display content based on the selected tab
+                        if selectedTab == .ingredients {
+                            Text("• 1 small ripe banana (preferably organic)")
+                            Text("• 25g finely ground oatmeal")
+                            Text("• 5ml runny honey")
+                        } else {
+                            Text("1. Mash the banana in a bowl.")
+                            Text("2. Mix in the oatmeal and honey.")
+                            Text("3. Apply to your face and leave for 10-15 minutes.")
+                            Text("4. Rinse off with warm water.")
+                        }
                     }
+                    .padding()
                 }
-                .padding()
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading) // Ensures content is aligned top
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .navigationBarHidden(true)
+        .navigationBarHidden(true) // Hide navigation bar
     }
 }
 
