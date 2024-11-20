@@ -4,7 +4,7 @@
 //
 //  Created by Juan Daniel Rodriguez Oropeza on 12.11.2024.
 //
-
+/*
 import SwiftUI
 
 struct HomeView: View {
@@ -24,3 +24,4 @@ struct HomeView: View {
 #Preview {
     HomeView()
 }
+*/

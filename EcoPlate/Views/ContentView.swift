@@ -6,94 +6,216 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct ContentView: View {
-
-    @State var email: String = ""
-    @State var password: String = ""
-
+    // State variables for dynamic counters
+    @State private var allCount: Int = 5
+    @State private var expiringCount: Int = 4
+    @State private var recipeCount: Int = 1
+    @State private var expiredCount: Int = 1
+    
+    // To manage showing the camera
+    @State private var isCameraPresented: Bool = false
+    @State private var isProductViewActive: Bool = false
+    @State private var capturedImage: UIImage? = nil
+    @State private var navigationPath = NavigationPath() // To manage navigation
+    
     var body: some View {
-        VStack {
-            Text("")
-                .padding(.vertical, 80)
-
-            VStack {
-                Text("Sign up")
-                    .font(.custom("Arial", size: 30))
+        NavigationStack(path: $navigationPath) {
+            VStack(alignment: .leading, spacing: 20) {
+                // Title
+                Text("Eco Plate")
+                    .font(.largeTitle)
                     .fontWeight(.bold)
-                    .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal)
-
-                Form {
-                    Section("Email") {
-                        TextField("Your email", text: $email)
-                            .textFieldStyle(.roundedBorder)
-                    }
-
-                    Section("Password") {
-                        TextField("Enter your password", text: $password)
-                            .textFieldStyle(.roundedBorder)
-                    }
-
-                    Button("Sign up") {
-                        /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Action@*/
-                        /*@END_MENU_TOKEN@*/
-                    }
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(Color.black)
-                    .foregroundStyle(Color.white)
-                    .clipShape(.capsule)
-                }
-                .scrollContentBackground(.hidden)
-                .background(Color.white)
-            }
-
-            HStack {
-                Divider()
-                    .frame(height: 1)
-                    .background(Color.gray)
-
-                Text("Or Register with")
-                    .foregroundColor(.gray)
-                    .padding(.horizontal, 8)
-
-                Divider()
-                    .frame(height: 1)
-                    .background(Color.gray)
-            }
-
-            .padding()
-
-            HStack {
                 
-                Button(action: {
-                    // Your button action here
-                }) {
-                    ZStack {
-                        // Black border layer
-                        Image(systemName: "applelogo")
-                            .resizable()
-                            .frame(width: 57, height: 57) // Slightly larger for the border effect
-                            .foregroundColor(.black)
-                            .offset(x: 1, y: 0)
-                        
-                        // White logo layer
-                        Image(systemName: "applelogo")
-                            .resizable()
-                            .frame(width: 50, height: 50) // Original size for the logo
-                            .foregroundColor(.white)
+                // Quick Access Buttons
+                VStack(spacing: 16) {
+                    HStack(spacing: 16) {
+                        NavigationLink(destination: AllProductsView()){
+                            QuickAccessButton(icon: "list.bullet", title: "All", count: allCount, color: .gray.opacity(0.1))
+                        }
+                        NavigationLink(destination: ExpiredProductsView()){
+                            QuickAccessButton(icon: "clock", title: "Expiring", count: expiringCount, color: .pink.opacity(0.2))
+                        }
+                    }
+                    
+                    HStack(spacing: 16) {
+                        QuickAccessButton(icon: "recipe_icon", title: "Recipe", count: recipeCount, color: .gray.opacity(0.1))
+                        NavigationLink(destination: ExpiringProductsView()){
+                            QuickAccessButton(icon: "trash", title: "Expired", count: recipeCount, color: .gray.opacity(0.1))
+                        }
+                    }
+                }
+                .padding(.horizontal)
+                
+                // Category Section
+                Text("Category")
+                    .font(.headline)
+                    .padding(.horizontal)
+                
+                VStack(spacing: 10) {
+                    NavigationLink(destination: VegsView()){
+                        CategoryButton(title: "Vegetable", count: 2) // Example dynamic split
+                    }
+                  
+                    NavigationLink(destination: FruitsView()){
+                        CategoryButton(title: "Fruits", count: 3) // Example dynamic split
+                    }
+                }
+                .padding(.horizontal)
+                
+                Spacer()
+                
+                // Floating Camera Button
+                HStack {
+                    Spacer()
+                    Button(action: {
+                        isCameraPresented.toggle() // Show the camera
+                    }) {
+                        HStack {
+                            Image(systemName: "camera")
+                                .foregroundColor(.black)
+                            Text("Camera")
+                                .foregroundColor(.black)
+                        }
+                        .padding(10)
+                        .background(Capsule().stroke(Color.black, lineWidth: 1))
                     }
                     .padding()
-                    .border(.black, width: 1)
+                    .sheet(isPresented: $isCameraPresented) {
+                        CameraView(capturedImage: $capturedImage, onCapture: {
+                            if let image = capturedImage {
+                                    print("Captured image: \(image)") // Debug message
+                                    navigationPath.append(image)     // Append to navigation path
+                                } else {
+                                    print("Captured image is nil.") // Debugging nil case
+                                }
+                        }, isProductViewActive: $isProductViewActive, allCount: $allCount, expiringCount: $expiringCount, recipeCount: $recipeCount, expiredCount: $expiredCount)
+                    }
                 }
-                .buttonStyle(PlainButtonStyle())
             }
+            .navigationDestination(for: UIImage.self) { image in
+                            ProductView(capturedImage: image) // Show ProductView for captured image
+                        }
+            .navigationBarTitle("", displayMode: .inline)
+            .navigationBarHidden(true)
         }
-        .navigationTitle("Sign up")
     }
 }
 
+// Reusable Quick Access Button
+struct QuickAccessButton: View {
+    let icon: String
+    let title: String
+    let count: Int
+    let color: Color
+
+    var body: some View {
+        VStack(spacing: 8) {
+            if icon == "recipe_icon" {
+                Image(icon) // Custom asset
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 40, height: 40)
+            } else {
+                Image(systemName: icon) // SF Symbol
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 40, height: 40)
+            }
+            
+            Text(title)
+                .font(.subheadline)
+                .fontWeight(.semibold)
+            
+            Text("\(count)")
+                .font(.subheadline)
+                .fontWeight(.medium)
+        }
+        .frame(maxWidth: .infinity)
+        .padding()
+        .background(color)
+        .cornerRadius(10)
+    }
+}
+
+// Category Button
+struct CategoryButton: View {
+    let title: String
+    let count: Int
+
+    var body: some View {
+        HStack {
+            Text(title)
+                .fontWeight(.semibold)
+            Spacer()
+            Text("\(count)")
+                .font(.subheadline)
+                .foregroundColor(.gray)
+        }
+        .padding()
+        .background(Color.gray.opacity(0.1))
+        .cornerRadius(10)
+    }
+}
+
+// Camera View
+struct CameraView: UIViewControllerRepresentable {
+    @Binding var capturedImage: UIImage?
+    var onCapture: (() -> Void)?
+    
+    @Binding var isProductViewActive: Bool
+    
+    // Bind counts to update after adding new products
+    @Binding var allCount: Int
+    @Binding var expiringCount: Int
+    @Binding var recipeCount: Int
+    @Binding var expiredCount: Int
+    
+    func makeUIViewController(context: Context) -> UIImagePickerController {
+        let picker = UIImagePickerController()
+        picker.delegate = context.coordinator
+        picker.sourceType = .camera
+        return picker
+    }
+    
+    func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+    
+    // Coordinator to handle image picking
+    class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+        var parent: CameraView
+
+        init(_ parent: CameraView) {
+            self.parent = parent
+        }
+
+        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+            // Example logic for updating counters
+            parent.allCount += 1
+            parent.expiringCount += 1 // Example increment
+            parent.recipeCount += 1   // Example increment
+            parent.expiredCount += 0  // Example (no increment)
+            
+            if let image = info[.originalImage] as? UIImage {
+                parent.capturedImage = image
+                print("Image picked: \(image).")
+                parent.onCapture?() // Trigger navigation after capture
+            } else {
+                print("Failed to capture image.")
+            }
+            parent.isProductViewActive = true
+            picker.dismiss(animated: true)
+        }
+    }
+}
+
+// Preview
 #Preview {
     ContentView()
 }

@@ -7,6 +7,7 @@
 
 import Foundation
 
-public enum ProductCategory: Codable, Observable {
-    case vegetables, fruits
+public enum ProductCategory: String, Codable, Observable,Hashable {
+    case vegetables = "Vegetables"
+    case fruits = "Fruits"
 }
