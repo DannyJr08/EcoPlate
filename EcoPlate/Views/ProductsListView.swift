@@ -51,7 +51,7 @@ public struct ProductsListView: View {
             }
             .searchable(text: $searchQuery)  // Adding the search bar here
             .sheet(isPresented: $showingRecipe) {
-                RecipeView(products: Array(selectedProducts))
+                RecipeView()
             }
         }
     }
@@ -148,23 +148,5 @@ public struct ProductsListView: View {
                 product.shortName.lowercased().contains(searchQuery.lowercased()) // Case-insensitive search
             }
         }
-    }
-}
-
-// Dummy RecipeView for the example
-struct RecipeView: View {
-    let products: [Product]
-    
-    var body: some View {
-        VStack {
-            Text("Recipes for Selected Products")
-                .font(.largeTitle)
-            ForEach(products, id: \.self) { product in
-                Text("Recipe for \(product.name)")
-                    .font(.headline)
-                // Additional recipe content goes here
-            }
-        }
-        .padding()
     }
 }
