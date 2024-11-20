@@ -3,10 +3,10 @@ import UIKit
 
 struct ContentView: View {
     // State variables for dynamic counters
-    @State private var allCount: Int = 0
-    @State private var expiringCount: Int = 0
-    @State private var recipeCount: Int = 0
-    @State private var expiredCount: Int = 0
+    @State private var allCount: Int = 5
+    @State private var expiringCount: Int = 4
+    @State private var recipeCount: Int = 1
+    @State private var expiredCount: Int = 1
     
     // To manage showing the camera
     @State private var isCameraPresented: Bool = false
@@ -26,13 +26,19 @@ struct ContentView: View {
                 // Quick Access Buttons
                 VStack(spacing: 16) {
                     HStack(spacing: 16) {
-                        QuickAccessButton(icon: "list.bullet", title: "All", count: allCount, color: .gray.opacity(0.1))
-                        QuickAccessButton(icon: "clock", title: "Expiring", count: expiringCount, color: .pink.opacity(0.2))
+                        NavigationLink(destination: AllProductsView()){
+                            QuickAccessButton(icon: "list.bullet", title: "All", count: allCount, color: .gray.opacity(0.1))
+                        }
+                        NavigationLink(destination: ExpiredProductsView()){
+                            QuickAccessButton(icon: "clock", title: "Expiring", count: expiringCount, color: .pink.opacity(0.2))
+                        }
                     }
                     
                     HStack(spacing: 16) {
                         QuickAccessButton(icon: "recipe_icon", title: "Recipe", count: recipeCount, color: .gray.opacity(0.1))
-                        QuickAccessButton(icon: "trash", title: "Expired", count: expiredCount, color: .gray.opacity(0.1))
+                        NavigationLink(destination: ExpiringProductsView()){
+                            QuickAccessButton(icon: "trash", title: "Expired", count: recipeCount, color: .gray.opacity(0.1))
+                        }
                     }
                 }
                 .padding(.horizontal)
@@ -43,8 +49,13 @@ struct ContentView: View {
                     .padding(.horizontal)
                 
                 VStack(spacing: 10) {
-                    CategoryButton(title: "Vegetable", count: allCount / 2) // Example dynamic split
-                    CategoryButton(title: "Fruits", count: allCount / 2) // Example dynamic split
+                    NavigationLink(destination: VegsView()){
+                        CategoryButton(title: "Vegetable", count: 2) // Example dynamic split
+                    }
+                  
+                    NavigationLink(destination: FruitsView()){
+                        CategoryButton(title: "Fruits", count: 3) // Example dynamic split
+                    }
                 }
                 .padding(.horizontal)
                 

@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Product: Codable, Identifiable, Observable {
+public struct Product: Codable, Identifiable, Observable,Hashable {
     public let id: Int
     public let name: ProductName
     public let category: ProductCategory
@@ -16,4 +16,8 @@ public struct Product: Codable, Identifiable, Observable {
     public var imageCondition: Double // From 0 to 1
     public var currentCondition: Double
     public let image: String
+    
+    var shortName:String{
+        return name.name
+    }
 }
